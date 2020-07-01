@@ -23,7 +23,7 @@ export const Form = styled.form`
     border-radius: 20px 0 0 20px;
     color: #3a3a3a;
 
-    &: placeholder {
+    &:placeholder {
       color: #a8a8b3;
     }
   }
@@ -49,14 +49,23 @@ export const Repositories = styled.div`
 
   a {
     background: #fff;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 100%;
     padding: 24px;
     display: block;
     text-decoration: none;
     align-items: center;
-
     display: flex;
+    transition: transform 0.2s;
+
+    /* when there's at least one 'a' element (anchor tag) BEFORE 'a' */
+    & + a {
+      margin-top: 16px;
+    }
+
+    &:hover {
+      transform: translateX(10px);
+    }
 
     img {
       width: 64px;
@@ -79,6 +88,7 @@ export const Repositories = styled.div`
     }
     svg {
       margin-left: auto;
+      color: #cbcbd6;
     }
   }
 `;

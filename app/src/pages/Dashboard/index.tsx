@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import logo from "../../assets/logo.svg";
-import { Title, Form, Repositories } from "./styles";
+import { Title, Form, Repositories, Error } from "./styles";
 import { FiChevronRight } from "react-icons/fi";
 import api from "../../services/api";
 
@@ -15,6 +15,8 @@ const Dashboard: React.FC = () => {
   //state for storing input's value
   const [newRepo, setNewRepo] = useState(``);
 
+  const [inputError, setInputError] = useState("");
+
   const [repositories, setRepositories] = useState<Array<Repository>>([]);
 
   // Should:
@@ -25,17 +27,27 @@ const Dashboard: React.FC = () => {
   async function handleAddRepository(
     event: FormEvent<HTMLFormElement>
   ): Promise<void> {
-    // for not loading the page
     event.preventDefault();
     console.log(newRepo);
 
-    const response = await api.get<Repository>(`repos/${newRepo}`);
-    console.log(response.data);
+    if (!newRepo) {
+      setInputError("Digite o autor/nome do repositório");
+      return;
+    }
+    // for not loading the page
 
-    const repository = response.data;
+    try {
+      const response = await api.get<Repository>(`repos/${newRepo}`);
+      console.log(response.data);
 
-    setRepositories([...repositories, repository]);
-    setNewRepo("");
+      const repository = response.data;
+
+      setRepositories([...repositories, repository]);
+      setNewRepo("");
+      setInputError("");
+    } catch (err) {
+      setInputError("Erro na buca por esse repositório");
+    }
   }
 
   return (
@@ -43,7 +55,7 @@ const Dashboard: React.FC = () => {
       <img src={logo} alt="GitHub Explorer" />
       <Title>Explore GitHub Repositories</Title>
 
-      <Form onSubmit={handleAddRepository} action="#">
+      <Form hasError={!!inputError} onSubmit={handleAddRepository} action="#">
         <input
           value={newRepo}
           onChange={(e) => setNewRepo(e.target.value)}
@@ -51,6 +63,9 @@ const Dashboard: React.FC = () => {
         />
         <button type="submit">Search</button>
       </Form>
+
+      {/* Error is showed if inputError is not empty */}
+      {inputError && <Error>{inputError}</Error>}
 
       <Repositories>
         {repositories.map((repository) => (

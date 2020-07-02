@@ -8,7 +8,8 @@ import Repository from "../pages/Repository";
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={Dashboard} />
-    <Route path="/repository" component={Repository} />
+    {/* :XXX is used as a parm; :XXX+ is used to take all the following items (with /) as one unique param */}
+    <Route path="/repositories/:repository+" component={Repository} />
   </Switch>
 );
 

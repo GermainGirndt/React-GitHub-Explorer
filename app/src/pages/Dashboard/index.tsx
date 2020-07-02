@@ -1,5 +1,7 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import logo from "../../assets/logo.svg";
+import { Link } from "react-router-dom";
+
 import { Title, Form, Repositories, Error } from "./styles";
 import { FiChevronRight } from "react-icons/fi";
 import api from "../../services/api";
@@ -17,8 +19,21 @@ const Dashboard: React.FC = () => {
 
   const [inputError, setInputError] = useState("");
 
-  const [repositories, setRepositories] = useState<Array<Repository>>([]);
+  const [repositories, setRepositories] = useState<Array<Repository>>(() => {
+    const storedRepositories = localStorage.getItem(
+      "@GithubExplorer:repositories"
+    );
 
+    return storedRepositories ? JSON.parse(storedRepositories) : [];
+  });
+
+  // always set items to local storage by repository when repositories' state change
+  useEffect(() => {
+    localStorage.setItem(
+      "@GithubExplorer:repositories",
+      JSON.stringify(repositories)
+    );
+  }, [repositories]);
   // Should:
   // Add new repositories
   // Access GitHub's API
@@ -55,7 +70,11 @@ const Dashboard: React.FC = () => {
       <img src={logo} alt="GitHub Explorer" />
       <Title>Explore GitHub Repositories</Title>
 
-      <Form hasError={!!inputError} onSubmit={handleAddRepository} action="#">
+      <Form
+        hasError={Boolean(inputError)}
+        onSubmit={handleAddRepository}
+        action="#"
+      >
         <input
           value={newRepo}
           onChange={(e) => setNewRepo(e.target.value)}
@@ -69,7 +88,10 @@ const Dashboard: React.FC = () => {
 
       <Repositories>
         {repositories.map((repository) => (
-          <a key={repository.full_name} href="teste">
+          <Link
+            key={repository.full_name}
+            to={`/repositories/${repository.full_name}`}
+          >
             <img
               src={repository.owner.avatar_url}
               alt={repository.owner.login}
@@ -80,7 +102,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <FiChevronRight size={20} />
-          </a>
+          </Link>
         ))}
       </Repositories>
     </>

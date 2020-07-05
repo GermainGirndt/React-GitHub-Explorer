@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
     console.log(newRepo);
 
     if (!newRepo) {
-      setInputError("Digite o autor/nome do repositório");
+      setInputError("Enter the author/repositories' name");
       return;
     }
     // for not loading the page
@@ -61,7 +61,7 @@ const Dashboard: React.FC = () => {
       setNewRepo("");
       setInputError("");
     } catch (err) {
-      setInputError("Erro na buca por esse repositório");
+      setInputError("Error. Could not find repository.");
     }
   }
 
@@ -78,7 +78,7 @@ const Dashboard: React.FC = () => {
         <input
           value={newRepo}
           onChange={(e) => setNewRepo(e.target.value)}
-          placeholder="Enter the repository's name:"
+          placeholder="Enter the repository's name"
         />
         <button type="submit">Search</button>
       </Form>

@@ -9,7 +9,7 @@ A GitHub repositories explorer built with Node and React.js
 
 * Frameworks/Libs: React.js/Node.js/Axios
 * Shows the repositories' name, description and image
-* On click, shows the repositories' stars, forks, and issues number. List the issues and redirect to issues page on click.
+* On click, shows the repositories' stars, forks, and issues number and list the repo's issues.
 * Store all data into local storage
 * Beautiful design
 * Beautiful design events on hover
